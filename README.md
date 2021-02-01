@@ -1,5 +1,3 @@
-# Development Container Template
+# Learn WordPress on Azure
 
-This project can be used as a template for other, new GitHub projects where you would
-like to use [this Docker image](https://github.com/ateamsw/devcontainer) as the dev
-container in your VS Code projects.
+A hands-on approach to learning how to run a production instance of WordPress using Azure App Services.

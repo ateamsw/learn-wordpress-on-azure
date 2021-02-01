@@ -1,0 +1,16 @@
+{
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "askForPassword": true,
+            "driver": "MySQL",
+            "name": "cdw-wordpress-20210127",
+            "connectString": "Server=cdw-wordpress-20210127-db.mysql.database.azure.com; Port=3306; Database={your_database}; Uid=wpdbadmin@cdw-wordpress-20210127-db; Pwd=aasdoif292rfv21!sfi; SslMode=Preferred;"
+        }
+    ]
+}
