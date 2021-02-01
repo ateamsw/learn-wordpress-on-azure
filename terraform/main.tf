@@ -6,7 +6,6 @@ terraform {
   }
 
   required_providers {
-    
     azurerm = {
       version = "~> 2.45"
     }
@@ -40,11 +39,7 @@ variable "location" {
 variable "db_username" {
   type        = string
   description = "The admin username for the database."
-}
-
-variable "db_password" {
-  type        = string
-  description = "The admin password for the database."
+  default     = "wpdbadmin"
 }
 
 locals {

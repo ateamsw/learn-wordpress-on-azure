@@ -30,7 +30,7 @@ resource "azurerm_app_service" "app" {
 
     WORDPRESS_DB_HOST      = azurerm_mysql_server.mysql.fqdn
     WORDPRESS_DB_USER      = "${var.db_username}@${azurerm_mysql_server.mysql.name}"
-    WORDPRESS_DB_PASSWORD  = var.db_password
+    WORDPRESS_DB_PASSWORD  = azurerm_mysql_server.mysql.administrator_login_password
     WORDPRESS_CONFIG_EXTRA = "define('FS_METHOD','direct');\ndefine('MYSQL_CLIENT_FLAGS', MYSQLI_CLIENT_SSL);"
   }
 

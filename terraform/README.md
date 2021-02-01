@@ -18,15 +18,18 @@ terraform plan \
 -var 'name_prefix=cdw' \
 -var 'name_base=wordpress' \
 -var 'name_suffix=20210131' \
--var 'location=westus2' \
---var-file=secrets.tfvars
+-var 'location=westus2'
+
+#--var-file=secrets.tfvars
+
 
 # Apply the script with the specified variable values
 terraform apply \
 -var 'name_prefix=cdw' \
 -var 'name_base=wordpress' \
 -var 'name_suffix=20210131' \
--var 'location=westus2' \
---var-file=secrets.tfvars
+-var 'location=westus2'
+
+#--var-file=secrets.tfvars
 
 ```
