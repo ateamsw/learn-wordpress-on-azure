@@ -42,6 +42,14 @@ resource "azurerm_app_service" "app" {
     access_key   = azurerm_storage_account.storage.primary_access_key
     mount_path   = "/var/www/html/wp-content"
   }
+  
+  /*
+  depends_on = [
+    azurerm_storage_account.storage,
+    azurerm_storage_share.wpcontent,
+    azurerm_private_endpoint.fspe
+  ]
+  */
 }
 
 resource "azurerm_app_service_virtual_network_swift_connection" "injection" {

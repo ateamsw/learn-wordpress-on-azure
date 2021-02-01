@@ -25,15 +25,15 @@ resource "azurerm_mysql_server" "mysql" {
   geo_redundant_backup_enabled      = false
   infrastructure_encryption_enabled = false
   public_network_access_enabled     = false
-  ssl_enforcement_enabled           = true
-  ssl_minimal_tls_version_enforced  = "TLS1_2"
+  ssl_enforcement_enabled           = false
+  #ssl_minimal_tls_version_enforced  = "TLS1_2"
 }
 
 resource "azurerm_private_endpoint" "dbpe" {
   name                = "${local.base_name}-dbpe"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
-  subnet_id           = azurerm_subnet.data.id
+  subnet_id           = azurerm_subnet.backend.id
 
   private_service_connection {
     name                           = "${local.base_name}-dbpe"

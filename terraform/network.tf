@@ -6,7 +6,7 @@ resource "azurerm_virtual_network" "vnet" {
 }
 
 resource "azurerm_subnet" "gateway" {
-  name                 = "gateway-subnet"
+  name                 = "gateway"
   resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.vnet.name
 
@@ -14,7 +14,7 @@ resource "azurerm_subnet" "gateway" {
 }
 
 resource "azurerm_subnet" "web" {
-  name                 = "web-subnet"
+  name                 = "web"
   resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = ["10.0.1.0/24"]
@@ -31,12 +31,12 @@ resource "azurerm_subnet" "web" {
   }
 }
 
-resource "azurerm_subnet" "data" {
-  name                 = "data-subnet"
+resource "azurerm_subnet" "backend" {
+  name                 = "backend"
   resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.vnet.name
 
-  address_prefixes     = ["10.0.10.0/24"]
+  address_prefixes     = ["10.0.2.0/24"]
 
   enforce_private_link_endpoint_network_policies = true
   # enforce_private_link_service_network_policies  = true
@@ -47,9 +47,21 @@ resource "azurerm_private_dns_zone" "dnsdb" {
   resource_group_name = azurerm_resource_group.rg.name
 }
 
-resource "azurerm_private_dns_zone_virtual_network_link" "dnsvnetlink" {
-  name                  = "dnsvnetlink"
+resource "azurerm_private_dns_zone_virtual_network_link" "dnsdbvnetlink" {
+  name                  = "dnsdbvnetlink"
   resource_group_name   = azurerm_resource_group.rg.name
   private_dns_zone_name = azurerm_private_dns_zone.dnsdb.name
+  virtual_network_id    = azurerm_virtual_network.vnet.id
+}
+
+resource "azurerm_private_dns_zone" "dnstorage" {
+  name                = "privatelink.file.core.windows.net"
+  resource_group_name = azurerm_resource_group.rg.name
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "dnsstoragevnetlink" {
+  name                  = "dnsstoragevnetlink"
+  resource_group_name   = azurerm_resource_group.rg.name
+  private_dns_zone_name = azurerm_private_dns_zone.dnstorage.name
   virtual_network_id    = azurerm_virtual_network.vnet.id
 }
