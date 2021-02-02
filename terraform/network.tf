@@ -19,7 +19,7 @@ resource "azurerm_subnet" "web" {
   virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = ["10.0.1.0/24"]
 
-  #service_endpoints = ["Microsoft.AzureCosmosDB"]
+  service_endpoints = ["Microsoft.Storage"]
 
   delegation {
     name = "web-delegation"
@@ -53,7 +53,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "dnsdbvnetlink" {
   private_dns_zone_name = azurerm_private_dns_zone.dnsdb.name
   virtual_network_id    = azurerm_virtual_network.vnet.id
 }
-
+/*
 resource "azurerm_private_dns_zone" "dnstorage" {
   name                = "privatelink.file.core.windows.net"
   resource_group_name = azurerm_resource_group.rg.name
@@ -65,3 +65,4 @@ resource "azurerm_private_dns_zone_virtual_network_link" "dnsstoragevnetlink" {
   private_dns_zone_name = azurerm_private_dns_zone.dnstorage.name
   virtual_network_id    = azurerm_virtual_network.vnet.id
 }
+*/

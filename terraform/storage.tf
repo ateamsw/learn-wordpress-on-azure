@@ -1,4 +1,5 @@
 /*
+# Use this for Standardv2 Storage account (vs. Premium)
 resource "azurerm_storage_account" "storage" {
   name                     = replace(local.base_name, "-", "")
   resource_group_name      = azurerm_resource_group.rg.name
@@ -8,6 +9,7 @@ resource "azurerm_storage_account" "storage" {
 }
 */
 
+# Premium Storage Account for storing the site content
 resource "azurerm_storage_account" "storage" {
   name                     = replace(local.base_name, "-", "")
   resource_group_name      = azurerm_resource_group.rg.name
@@ -15,23 +17,31 @@ resource "azurerm_storage_account" "storage" {
   account_kind             = "FileStorage"
   account_tier             = "Premium"
   account_replication_type = "LRS"
-
-  /*
-  network_rules {
-    default_action             = "Deny"
-    ip_rules                   = []
-    virtual_network_subnet_ids = []
-    bypass                     = ["Logging", "Metrics", "AzureServices"]
-  }
-  */
 }
 
+# Firewall the storage account using Service Endpoints
+resource "azurerm_storage_account_network_rules" "fsse" {
+  resource_group_name  = azurerm_resource_group.rg.name
+  storage_account_name = azurerm_storage_account.storage.name
+
+  default_action             = "Deny"
+  ip_rules                   = [ ]
+  bypass                     = ["AzureServices"]
+  virtual_network_subnet_ids = [ azurerm_subnet.web.id ]
+}
+
+# Create the file share within the storage account
 resource "azurerm_storage_share" "wpcontent" {
   name                 = "wpcontent"
   storage_account_name = azurerm_storage_account.storage.name
   quota                = 100
 }
 
+/*
+# Used for setting up Private Endpoints to the storage account.
+# This currently does not work because file mounting for app services
+# does not support VNET integration/private link, so it must mount
+# over the public interface.
 resource "azurerm_private_endpoint" "fspe" {
   name                = "${local.base_name}-fspe"
   resource_group_name = azurerm_resource_group.rg.name
@@ -50,3 +60,4 @@ resource "azurerm_private_endpoint" "fspe" {
     private_dns_zone_ids = [azurerm_private_dns_zone.dnstorage.id]
   }
 }
+*/
