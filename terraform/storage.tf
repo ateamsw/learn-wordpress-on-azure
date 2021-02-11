@@ -1,7 +1,7 @@
 /*
 # Use this for Standardv2 Storage account (vs. Premium)
 resource "azurerm_storage_account" "storage" {
-  name                     = replace(local.base_name, "-", "")
+  name                     = replace(var.base_name, "-", "")
   resource_group_name      = azurerm_resource_group.rg.name
   location                 = azurerm_resource_group.rg.location
   account_tier             = "Standard"
@@ -11,7 +11,7 @@ resource "azurerm_storage_account" "storage" {
 
 # Premium Storage Account for storing the site content
 resource "azurerm_storage_account" "storage" {
-  name                     = replace(local.base_name, "-", "")
+  name                     = replace(var.base_name, "-", "")
   resource_group_name      = azurerm_resource_group.rg.name
   location                 = azurerm_resource_group.rg.location
   account_kind             = "FileStorage"
@@ -43,20 +43,20 @@ resource "azurerm_storage_share" "wpcontent" {
 # does not support VNET integration/private link, so it must mount
 # over the public interface.
 resource "azurerm_private_endpoint" "fspe" {
-  name                = "${local.base_name}-fspe"
+  name                = "${var.base_name}-fspe"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   subnet_id           = azurerm_subnet.backend.id
 
   private_service_connection {
-    name                           = "${local.base_name}-fspe"
+    name                           = "${var.base_name}-fspe"
     private_connection_resource_id = azurerm_storage_account.storage.id
     subresource_names              = ["file"]
     is_manual_connection           = false
   }
 
   private_dns_zone_group {
-    name                 = "${local.base_name}-fspe"
+    name                 = "${var.base_name}-fspe"
     private_dns_zone_ids = [azurerm_private_dns_zone.dnstorage.id]
   }
 }

@@ -16,19 +16,9 @@ provider "azurerm" {
   features {}
 }
 
-variable "name_prefix" {
-  type        = string
-  description = "A prefix for the naming scheme as part of prefix-base-suffix."
-}
-
-variable "name_base" {
+variable "base_name" {
   type        = string
   description = "A base for the naming scheme as part of prefix-base-suffix."
-}
-
-variable "name_suffix" {
-  type        = string
-  description = "A suffix for the naming scheme as part of prefix-base-suffix."
 }
 
 variable "location" {
@@ -42,11 +32,7 @@ variable "db_username" {
   default     = "wpdbadmin"
 }
 
-locals {
-  base_name = "${var.name_prefix}-${var.name_base}-${var.name_suffix}"
-}
-
 resource "azurerm_resource_group" "rg" {
-  name     = local.base_name
+  name     = var.base_name
   location = var.location
 }

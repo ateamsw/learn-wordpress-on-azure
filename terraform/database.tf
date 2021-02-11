@@ -9,7 +9,7 @@ resource "random_password" "dbpwd" {
 }
 
 resource "azurerm_mysql_server" "mysql" {
-  name                = "${local.base_name}-mysql"
+  name                = "${var.base_name}-mysql"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
 
@@ -30,20 +30,20 @@ resource "azurerm_mysql_server" "mysql" {
 }
 
 resource "azurerm_private_endpoint" "dbpe" {
-  name                = "${local.base_name}-dbpe"
+  name                = "${var.base_name}-dbpe"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   subnet_id           = azurerm_subnet.backend.id
 
   private_service_connection {
-    name                           = "${local.base_name}-dbpe"
+    name                           = "${var.base_name}-dbpe"
     private_connection_resource_id = azurerm_mysql_server.mysql.id
     subresource_names              = ["mysqlServer"]
     is_manual_connection           = false
   }
 
   private_dns_zone_group {
-    name                 = "${local.base_name}-dbpe"
+    name                 = "${var.base_name}-dbpe"
     private_dns_zone_ids = [azurerm_private_dns_zone.dnsdb.id]
   }
 }
