@@ -15,7 +15,7 @@ terraform init --backend-config ./backend-secrets.tfvars
 
 # Run the plan to see the changes
 terraform plan \
--var 'base_name=cdw-wordpress-20210211' \
+-var 'base_name=cdw-wordpress-20210212' \
 -var 'location=westus2'
 
 #--var-file=secrets.tfvars
@@ -23,7 +23,7 @@ terraform plan \
 
 # Apply the script with the specified variable values
 terraform apply \
--var 'base_name=cdw-wordpress-20210211' \
+-var 'base_name=cdw-wordpress-20210212' \
 -var 'location=westus2'
 
 #--var-file=secrets.tfvars

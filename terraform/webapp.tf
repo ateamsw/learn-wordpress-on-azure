@@ -22,6 +22,18 @@ resource "azurerm_app_service" "app" {
     always_on        = true
     linux_fx_version = "DOCKER|cwiederspan/mywordpress"
     ftps_state       = "Disabled"
+
+    ip_restriction = [
+      {
+        name        = "Allow AFD"
+        action      = "Allow"
+        priority    = 100
+        service_tag = "AzureFrontDoor.Backend"
+        ip_address  = null
+        subnet_id   = null
+        virtual_network_subnet_id = null
+      }
+    ]
   }
 
   app_settings = {
@@ -31,7 +43,8 @@ resource "azurerm_app_service" "app" {
     WORDPRESS_DB_HOST      = azurerm_mysql_server.mysql.fqdn
     WORDPRESS_DB_USER      = "${var.db_username}@${azurerm_mysql_server.mysql.name}"
     WORDPRESS_DB_PASSWORD  = azurerm_mysql_server.mysql.administrator_login_password
-    WORDPRESS_CONFIG_EXTRA = "define('FS_METHOD','direct');\ndefine('MYSQL_CLIENT_FLAGS', MYSQLI_CLIENT_SSL);"
+    #WORDPRESS_CONFIG_EXTRA = "define('FS_METHOD','direct');\ndefine('MYSQL_CLIENT_FLAGS', MYSQLI_CLIENT_SSL);"
+    WORDPRESS_CONFIG_EXTRA = "define('FS_METHOD','direct');\ndefine('MYSQL_CLIENT_FLAGS', MYSQLI_CLIENT_SSL);\ndefine('WP_HOME', 'https://${var.base_name}-afd.azurefd.net');\ndefine('WP_SITEURL', 'https://${var.base_name}-afd.azurefd.net');"
   }
 
   storage_account {
@@ -42,7 +55,7 @@ resource "azurerm_app_service" "app" {
     access_key   = azurerm_storage_account.storage.primary_access_key
     mount_path   = "/var/www/html/wp-content"
   }
-  
+
   /*
   depends_on = [
     azurerm_storage_account.storage,

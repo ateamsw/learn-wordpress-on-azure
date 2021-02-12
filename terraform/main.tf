@@ -1,5 +1,5 @@
 terraform {
-  required_version = ">= 0.12"
+  required_version = ">= 0.14"
   
   backend "azurerm" {
     environment = "public"
@@ -7,7 +7,7 @@ terraform {
 
   required_providers {
     azurerm = {
-      version = "~> 2.45"
+      version = "~> 2.47"
     }
   }
 }
