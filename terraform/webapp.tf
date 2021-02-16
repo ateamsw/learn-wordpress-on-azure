@@ -56,6 +56,20 @@ resource "azurerm_app_service" "app" {
     mount_path   = "/var/www/html/wp-content"
   }
 
+  logs {
+    detailed_error_messages_enabled = true
+    failed_request_tracing_enabled  = true
+    
+    #application_logs { }
+
+    http_logs {
+      file_system {
+        retention_in_days = 7
+        retention_in_mb   = 35
+      }
+    }
+  }
+
   /*
   depends_on = [
     azurerm_storage_account.storage,
